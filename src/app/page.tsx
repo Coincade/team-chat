@@ -10,7 +10,10 @@ export default function Home() {
   return (
     <div>
       Logged In!
-      <Button onClick={() => signOut()}>
+      <Button onClick={async() => {
+        await signOut();
+        window.location.reload();
+      }}>
         Sign Out
       </Button>
     </div>
