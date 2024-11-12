@@ -34,7 +34,7 @@ export const useConfirm = (
         handleclose();
     }
 
-    const ConfirmDialog = () => {
+    const ConfirmDialog : any = () => {
         <Dialog open={promise !== null}>
             <DialogContent>
                 <DialogHeader>
