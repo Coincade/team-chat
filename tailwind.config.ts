@@ -11,6 +11,10 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
+			hirect: {
+				sidebar: "#1E328F",
+				channelbar: "#25377D"
+			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

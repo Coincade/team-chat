@@ -1,6 +1,6 @@
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
-import { UseGetChannels } from "@/features/channels/api/use-get-channel";
+import { UseGetChannels } from "@/features/channels/api/use-get-channels";
 import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useCreateChannelModal } from "@/features/channels/store/use-create-channel-modal";
 
@@ -28,7 +28,7 @@ export const WorkspaceSidebar = () => {
 
   if(workspaceLoading || memberLoading){
     return (
-      <div className="flex flex-col bg-[#5e2c5f] h-full items-center justify-center">
+      <div className="flex flex-col bg-hirect-channelbar h-full items-center justify-center">
         <Loader className="size-5 animate-spin text-white"/>
       </div>
     )
@@ -36,7 +36,7 @@ export const WorkspaceSidebar = () => {
 
   if(!workspace || !member){
     return (
-      <div className="flex flex-col gap-y-2 bg-[#5e2c5f] h-full items-center justify-center">
+      <div className="flex flex-col gap-y-2 bg-hirect-channelbar h-full items-center justify-center">
         <AlertTriangle className="size-5 text-white"/>
         <p className="text-white text-sm">Workspace Not Found</p>
       </div>
@@ -44,7 +44,7 @@ export const WorkspaceSidebar = () => {
   }
 
   return (
-    <div className="flex flex-col bg-[#5e2c5f] h-full">
+    <div className="flex flex-col bg-hirect-channelbar h-full">
       <WorkspaceHeader workspace={workspace} isAdmin={member.role === "admin"}/>
       <div className="flex flex-col px-2 mt-3">
         <SidebarItem 

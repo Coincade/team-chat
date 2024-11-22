@@ -1,6 +1,6 @@
 "use client";
 
-import { UseGetChannels } from "@/features/channels/api/use-get-channel";
+import { UseGetChannels } from "@/features/channels/api/use-get-channels";
 import { useCreateChannelModal } from "@/features/channels/store/use-create-channel-modal";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
@@ -33,7 +33,7 @@ const WorkspaceIdPage = () => {
     }
   },[member, memberLoading, isAdmin, channelId, workspaceLoading, channelsLoading, workspace, open, setOpen, router, workspaceId])
 
-  if(workspaceLoading || channelsLoading){
+  if(workspaceLoading || channelsLoading || memberLoading){
     return (
       <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
         <Loader className="size-6 animate-spin text-muted-foreground"/>
@@ -41,7 +41,7 @@ const WorkspaceIdPage = () => {
     )
   }
 
-  if(!workspace){
+  if(!workspace || !member){
     return (
       <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
         <TriangleAlert className="size-6 text-muted-foreground"/>
