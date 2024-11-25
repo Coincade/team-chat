@@ -11,12 +11,13 @@ import "quill/dist/quill.snow.css";
 import { Delta, Op } from "quill/core";
 
 import { Button } from "./ui/button";
-import { ImageIcon, Smile } from "lucide-react";
+import { ImageIcon, Smile, XIcon } from "lucide-react";
 import { PiTextAa } from "react-icons/pi";
 import { MdSend } from "react-icons/md";
 import { Hint } from "./hint";
 import { cn } from "@/lib/utils";
 import { EmojiPopover } from "./emoji-popover";
+import Image from "next/image";
 
 type EditorValue = {
   image: File | null;
@@ -44,6 +45,7 @@ const Editor = ({
 }: EditorProps) => {
 
     const [text, setText] = useState("");
+    const [image, setImage] = useState<File | null>(null);
     const [isToolbarVisible, setIsToolbarVisible] = useState(true);
 
   const submitRef = useRef(onSubmit);
@@ -52,6 +54,7 @@ const Editor = ({
   const defaultValueRef = useRef(defaultValue);
   const containerRef = useRef<HTMLDivElement>(null);
   const disabledRef = useRef(disabled);
+  const imageElementRef = useRef<HTMLInputElement>(null);
 
   useLayoutEffect(() => {
     submitRef.current = onSubmit;
@@ -146,8 +149,37 @@ const Editor = ({
 
   return (
     <div className="flex flex-col">
+      <input type="file" 
+      accept="image/*"
+      ref={imageElementRef}
+      onChange={(event) => setImage(event.target.files![0])}
+      className="hidden"
+      />
       <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
         <div ref={containerRef} className="h-full ql-custom" />
+        {!!image && (
+          <div className="p-2">
+            <div className="relative size-[62px] flex items-center justify-center group/image">
+            <Hint label="Remove Image">
+            <button
+            onClick={() => {
+              setImage(null);
+              imageElementRef.current!.value = "";
+            }}
+            className="flex rounded-full bg-black/70 hover:bg-black absolute -top-2.5 -right-2.5 text-white size-6 z-[4] border-2 border-white items-center justify-center"
+            >
+              <XIcon className="size-3.5"/>
+            </button>
+            </Hint>
+            <Image
+            src= {URL.createObjectURL(image)}
+            alt="Uploaded"
+            fill
+            className="rounded-xl overflow-hidden border object-cover"
+            />
+            </div>
+          </div>
+        )}
         <div className="flex px-2 pb-2 z-[5]">
           <Hint label={isToolbarVisible ? "Hide Formatting" : "Show Formatting"}>
             <Button
@@ -176,7 +208,7 @@ const Editor = ({
                 disabled={disabled}
                 size="iconSm"
                 variant="ghost"
-                onClick={() => {}}
+                onClick={() => {imageElementRef.current?.click()}}
               >
                 <ImageIcon className="size-4" />
               </Button>
