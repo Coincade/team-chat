@@ -18,7 +18,7 @@ interface WorkspaceIdLayoutProps {
   children: React.ReactNode;
 }
 
-const workspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
+const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
   const { parentMessageId, onClose } = usePanel();
 
   const showPanel = !!parentMessageId;
@@ -63,4 +63,4 @@ const workspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
   );
 };
 
-export default workspaceIdLayout;
+export default WorkspaceIdLayout;
