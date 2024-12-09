@@ -80,7 +80,7 @@ export const WorkspaceHeader = ({ workspace, isAdmin }: WorkspaceHeaderProps) =>
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="flex items-center gap-0.5">
+            {/* <div className="flex items-center gap-0.5">
             <Hint label="Filter Conversations" side="bottom" >
                 <Button variant="transparent" size="iconSm">
                     <ListFilter className="size-4" />
@@ -91,7 +91,7 @@ export const WorkspaceHeader = ({ workspace, isAdmin }: WorkspaceHeaderProps) =>
                     <SquarePen className="size-4" />
                 </Button>
                 </Hint>
-            </div>
+            </div> */}
         </div>
         </>
     )
