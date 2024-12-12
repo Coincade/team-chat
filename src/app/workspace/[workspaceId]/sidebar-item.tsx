@@ -7,6 +7,8 @@ import { IconType } from 'react-icons/lib';
 
 import { cva, type VariantProps} from "class-variance-authority";
 import { cn } from '@/lib/utils';
+import { useGetUnreadCounts } from '@/features/unread/api/use-get-unread-counts';
+import { Id } from '../../../../convex/_generated/dataModel';
 
 const sidebarItemVariants = cva(
     "flex items-center gap-1.5 justify-start font-normal h-7 px-[18px] text-sm overflow-hidden",{
@@ -28,16 +30,27 @@ interface SidebarItemProps{
     id:string;
     icon: LucideIcon | IconType;
     variant?: VariantProps<typeof sidebarItemVariants>["variant"];
+    channelId: Id<"channels">;
 }
 
 export const SidebarItem = ({
     label,
     id,
     icon: Icon,
-    variant
+    variant,
+    channelId
 }: SidebarItemProps) => {
 
     const workspaceId = useWorkspaceId();
+    const{data: unreadCounts, isLoading: unreadCountLoading} = useGetUnreadCounts({workspaceId});
+
+    const getUnreadCount = (id: Id<"channels"> | Id<"conversations">, type: 'channel' | 'conversation') => {
+      return unreadCounts?.find(count => 
+        type === 'channel' 
+          ? count.channelId === id 
+          : count.conversationId === id
+      )?.unreadCount || 0;
+    };
 
   return (
     <Button
@@ -46,9 +59,16 @@ export const SidebarItem = ({
     className={cn(sidebarItemVariants({variant: variant}))}
     asChild
     >
-        <Link href={`/workspace/${workspaceId}/channel/${id}`}>
+        <Link href={`/workspace/${workspaceId}/channel/${id}`} className='flex justify-between'>
+        <div className='flex'>
             <Icon className='size-3.5 mr-1 shrink-0'/>
             <span className='text-sm truncate'>{label}</span>
+            </div>
+            {getUnreadCount(channelId, 'channel') > 0 && (
+            <span className=" bg-rose-500 text-white rounded-full px-2 text-center">
+              {getUnreadCount(channelId, 'channel')}
+            </span>
+          )}
         </Link>
     </Button>
   )

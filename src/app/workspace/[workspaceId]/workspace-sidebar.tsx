@@ -28,7 +28,8 @@ export const WorkspaceSidebar = () => {
   const {data: members, isLoading: membersLoading} = useGetMembers({workspaceId});
 
 
-  if(workspaceLoading || memberLoading){
+
+  if(workspaceLoading || memberLoading || channelsLoading || membersLoading){
     return (
       <div className="flex flex-col bg-hirect-channelbar h-full items-center justify-center">
         <Loader className="size-5 animate-spin text-white"/>
@@ -73,6 +74,7 @@ export const WorkspaceSidebar = () => {
           label={item.name}
           id={item._id}
           variant={channelId == item._id ? "active" : "default"}
+          channelId={item._id}
           />
         ))}
         </WorkspaceSection>

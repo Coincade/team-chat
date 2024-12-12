@@ -52,7 +52,22 @@ const schema = defineSchema({
   })
   .index("by_workspace_id", ["workspaceId"])
   .index("by_message_id", ["messageId"])
+  .index("by_member_id", ["memberId"]),
+  unread_messages: defineTable({
+    memberId: v.id("members"),
+    channelId: v.optional(v.id("channels")),
+    conversationId: v.optional(v.id("conversations")),
+    lastReadMessageId: v.optional(v.id("messages")),
+    unreadCount: v.number(),
+    workspaceId: v.id("workspaces")
+  })
   .index("by_member_id", ["memberId"])
+  .index("by_channel_id", ["channelId"])
+  .index("by_conversation_id", ["conversationId"])
+  .index("by_workspace_id", ["workspaceId"])
+  .index("by_workspace_id_member_id", ["workspaceId", "memberId"])
+  .index("by_workspace_id_member_id_channel_id", ["workspaceId", "memberId", "channelId"])
+  .index("by_workspace_id_member_id_conversation_id", ["workspaceId", "memberId", "conversationId"])
 });
  
 export default schema;

@@ -1,12 +1,18 @@
+import { useRef, useState } from "react"
+
+import { Id } from "../../../../../../convex/_generated/dataModel";
+
 import { useCreateMessage } from "@/features/messages/api/use-create-message";
 import { useGenerateUploadUrl } from "@/features/upload/api/use-generate-upload-url";
+import { useIncrementUnreadCounter } from "@/features/unread/api/use-increment-unread-counter";
+
 import { useChannelId } from "@/hooks/use-channel-id";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
+
+import { toast } from "sonner";
+
 import dynamic from "next/dynamic"
 import Quill from "quill"
-import { useRef, useState } from "react"
-import { toast } from "sonner";
-import { Id } from "../../../../../../convex/_generated/dataModel";
 
 const Editor = dynamic(() => import("@/components/editor"), {ssr: false})
 
@@ -31,6 +37,7 @@ export const ChatInput = ({placeholder}: ChatInputProps) =>{
 
     const {mutate: createMessage} = useCreateMessage();
     const {mutate: generateUploadUrl} = useGenerateUploadUrl();
+    const {mutate: incrementUnreadCount} = useIncrementUnreadCounter();
 
     const handleSubmit = async({
         body,
@@ -73,6 +80,7 @@ export const ChatInput = ({placeholder}: ChatInputProps) =>{
             }
 
         await createMessage(values, {throwError: true});
+        await incrementUnreadCount({workspaceId, channelId});
 
         setEditorKey((prevKey) => prevKey + 1);
     }
