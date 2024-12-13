@@ -26,6 +26,7 @@ export const WorkspaceSidebar = () => {
   const {data: workspace, isLoading: workspaceLoading} = useGetWorkspace({id: workspaceId});
   const {data: channels, isLoading:channelsLoading} = UseGetChannels({workspaceId});
   const {data: members, isLoading: membersLoading} = useGetMembers({workspaceId});
+  
 
 
 
@@ -91,6 +92,7 @@ export const WorkspaceSidebar = () => {
           label={item.user.name}
           image={item.user.image}
           variant={item._id === memberId ? "active" : "default"}
+          otherMemberId={item._id}
           />
         ))}
         </WorkspaceSection>

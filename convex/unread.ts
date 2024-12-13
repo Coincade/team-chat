@@ -28,6 +28,8 @@ export const incrementUnreadCount = mutation({
     }
 
     let otherMembers;
+    let existingUnreadRecordId : Id<"unread_messages">
+    let unreadMessageId : Id<"unread_messages">
 
     if (args.channelId) {
       // For channel messages, find all members in the workspace
@@ -56,19 +58,22 @@ export const incrementUnreadCount = mutation({
             await ctx.db.patch(existingUnreadRecord._id, {
               unreadCount: existingUnreadRecord.unreadCount + 1,
             });
-            return existingUnreadRecord._id;
+            existingUnreadRecordId =  existingUnreadRecord._id;
           } else {
-            const unreadMessageId = await ctx.db.insert("unread_messages", {
+            const unreadMessageIdData = await ctx.db.insert("unread_messages", {
               memberId: member._id,
               workspaceId: args.workspaceId,
               channelId: args.channelId,
               unreadCount: 1,
               lastReadMessageId: undefined,
             });
-            return unreadMessageId;
+            unreadMessageId =  unreadMessageIdData;
           }
         }
+        
       }
+
+      return args.channelId;
     } else if (args.conversationId) {  
         const conversation = await ctx.db.get(args.conversationId);
 
@@ -99,6 +104,8 @@ export const incrementUnreadCount = mutation({
         }
 
     }
+
+    
   },
 });
 

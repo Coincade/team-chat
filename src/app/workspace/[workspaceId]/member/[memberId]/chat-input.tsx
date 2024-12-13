@@ -10,6 +10,7 @@ import { Id } from "../../../../../../convex/_generated/dataModel";
 
 import Quill from "quill"
 import dynamic from "next/dynamic"
+import { useIncrementUnreadCounter } from "@/features/unread/api/use-increment-unread-counter";
 
 const Editor = dynamic(() => import("@/components/editor"), {ssr: false})
 
@@ -34,6 +35,7 @@ export const ChatInput = ({placeholder, conversationId}: ChatInputProps) =>{
 
     const {mutate: createMessage} = useCreateMessage();
     const {mutate: generateUploadUrl} = useGenerateUploadUrl();
+    const {mutate: incrementUnreadCount} = useIncrementUnreadCounter();
 
     const handleSubmit = async({
         body,
@@ -76,6 +78,7 @@ export const ChatInput = ({placeholder, conversationId}: ChatInputProps) =>{
             }
 
         await createMessage(values, {throwError: true});
+        await incrementUnreadCount({workspaceId, conversationId});
 
         setEditorKey((prevKey) => prevKey + 1);
     }

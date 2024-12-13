@@ -10,7 +10,7 @@ type RequestType = {
   conversationId?: Id<"conversations">;
 };
 
-type ResponseType = Id<"unread_messages"> | null;
+type ResponseType = Id<"channels"> | Id<"unread_messages"> | null;
 
 type Options = {
   onSuccess?: (data: ResponseType) => void;
