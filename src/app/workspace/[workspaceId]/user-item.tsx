@@ -43,9 +43,15 @@ export const UserItem = ({
     const workspaceId = useWorkspaceId();
     const avatarFallback = label.charAt(0).toUpperCase();
 
-    const{data: unreadCount, isLoading: unreadCountLoading} = UseGetUnreadCount({workspaceId});
     const {data: conversationId, isLoading: conversationIdLoading} = UseGetConversation({memberId:otherMemberId, workspaceId});
-
+    const {
+      data: unreadCount, 
+      isLoading: unreadCountLoading
+    } = UseGetUnreadCount({
+      workspaceId, 
+      conversationId: conversationId ?? undefined, 
+    });
+    
     // const getUnreadCount = (id: Id<"channels"> | Id<"conversations">, type: 'channel' | 'conversation') => {
     //   return unreadCounts?.find(count => 
     //     type === 'channel' 
@@ -75,9 +81,9 @@ export const UserItem = ({
             </Avatar>
             <span className='text-sm truncate'>{label}</span>
             </div>
-            {conversationId && (
+            {conversationId && unreadCount &&(
             <span className=" bg-rose-500 text-white rounded-full px-2 text-center">
-              {unreadCount?.unreadCount}
+              {unreadCount.unreadCount}
             </span>
           )}
         </Link>

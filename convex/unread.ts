@@ -85,15 +85,17 @@ export const incrementUnreadCount = mutation({
         ? conversation.memberTwoId
         : conversation.memberOneId
 
+        if(!conversation){
+          throw new Error("Other Member Id Not Found");
+        };
+
         const existingUnreadRecord = await ctx.db
         .query("unread_messages")
-        .filter((q) => q.eq(q.field("workspaceId"), args.workspaceId))
-        .filter((q) =>
-          q.and(
-            q.eq(q.field("memberId"), otherMemberId),
-            q.eq(q.field("conversationId"), args.conversationId)
-          )
-        )
+        .withIndex("by_workspace_id_member_id_conversation_id", (q) => 
+          q.eq("workspaceId", args.workspaceId)
+          .eq("memberId", otherMemberId)
+          .eq("conversationId", args.conversationId)
+      )
         .unique();
 
         if(existingUnreadRecord){
@@ -101,6 +103,17 @@ export const incrementUnreadCount = mutation({
             unreadCount: existingUnreadRecord.unreadCount + 1,
           });
           return existingUnreadRecord._id;
+        }
+
+        else{
+          const unreadMessageId = await ctx.db.insert("unread_messages", {
+            memberId: otherMemberId,
+            workspaceId: args.workspaceId,
+            conversationId: args.conversationId,
+            unreadCount: 1,
+            lastReadMessageId: undefined,
+          });
+          return unreadMessageId;
         }
 
     }

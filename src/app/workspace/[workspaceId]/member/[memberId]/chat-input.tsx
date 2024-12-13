@@ -78,7 +78,15 @@ export const ChatInput = ({placeholder, conversationId}: ChatInputProps) =>{
             }
 
         await createMessage(values, {throwError: true});
-        await incrementUnreadCount({workspaceId, conversationId});
+        await incrementUnreadCount({workspaceId, conversationId}, {
+            onSuccess(){
+                console.log("Count incremented");
+            },
+            onError(error) {
+                console.log("Error in incrementing unread count for member ===> ",error);
+                
+            },
+        });
 
         setEditorKey((prevKey) => prevKey + 1);
     }
