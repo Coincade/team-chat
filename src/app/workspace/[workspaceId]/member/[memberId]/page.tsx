@@ -11,6 +11,7 @@ import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { Id } from "../../../../../../convex/_generated/dataModel";
 import { toast } from "sonner";
 import { Conversation } from "./conversation";
+import { useMarkAsRead } from "@/features/unread/api/use-mark-as-read";
 
 const MemberIdPage = () => {
   const memberId = useMemberId();
@@ -19,6 +20,7 @@ const MemberIdPage = () => {
   const [conversationId, setConversationId] = useState<Id<"conversations"> | null>(null);
 
   const { data, mutate, isPending } = useCreateOrGetConversation();
+  const {mutate: markAsRead} = useMarkAsRead();
 
   useEffect(() => {
     mutate({
@@ -32,7 +34,14 @@ const MemberIdPage = () => {
         toast.error("Failed to create ot get a conversation");
       }
     });
-  }, [memberId, workspaceId, mutate]);
+    conversationId &&
+    markAsRead({
+      workspaceId,
+      conversationId,
+    },
+  {throwError: false}
+  )
+  }, [memberId, workspaceId, conversationId, mutate]);
 
   if (isPending) {
     return (

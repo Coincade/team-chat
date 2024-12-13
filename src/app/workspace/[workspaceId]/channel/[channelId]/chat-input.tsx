@@ -80,7 +80,7 @@ export const ChatInput = ({placeholder}: ChatInputProps) =>{
             }
 
         await createMessage(values, {throwError: true});
-        await incrementUnreadCount({workspaceId, channelId});
+        await incrementUnreadCount({workspaceId, channelId},{throwError: true});
 
         setEditorKey((prevKey) => prevKey + 1);
     }

@@ -5,11 +5,10 @@ import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 
 type RequestType = {
-  memberId: Id<"members">;
   workspaceId: Id<"workspaces">;
   channelId?: Id<"channels">;
   conversationId?: Id<"conversations">;
-  lastMessageId:Id<"messages">;
+  lastMessageId?:Id<"messages">;
 };
 
 type ResponseType = Id<"unread_messages"> | null;

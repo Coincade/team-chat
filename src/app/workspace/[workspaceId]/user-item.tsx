@@ -31,6 +31,7 @@ interface UserItemProps{
     image?: string;
     variant?: VariantProps<typeof userItemVariants>["variant"];
     otherMemberId:Id<"members">
+    onClick: () => void;
 }
 
 export const UserItem = ({
@@ -38,7 +39,8 @@ export const UserItem = ({
     label = "Member",
     image,
     variant,
-    otherMemberId
+    otherMemberId,
+    onClick
 }: UserItemProps) => {
     const workspaceId = useWorkspaceId();
     const avatarFallback = label.charAt(0).toUpperCase();
@@ -70,6 +72,7 @@ export const UserItem = ({
     className={cn(userItemVariants({variant: variant}))}
     size="sm"
     asChild
+    onClick={() => onClick()}
     >
         <Link href={`/workspace/${workspaceId}/member/${id}`} className='flex justify-between'>
         <div className='flex'>
@@ -83,7 +86,7 @@ export const UserItem = ({
             </div>
             {conversationId && unreadCount &&(
             <span className=" bg-rose-500 text-white rounded-full px-2 text-center">
-              {unreadCount.unreadCount}
+              {unreadCount.unreadCount > 0 && unreadCount.unreadCount}
             </span>
           )}
         </Link>

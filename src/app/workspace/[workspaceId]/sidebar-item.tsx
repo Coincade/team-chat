@@ -31,6 +31,7 @@ interface SidebarItemProps{
     icon: LucideIcon | IconType;
     variant?: VariantProps<typeof sidebarItemVariants>["variant"];
     channelId: Id<"channels">;
+    onClick: () => void;
 }
 
 export const SidebarItem = ({
@@ -38,7 +39,8 @@ export const SidebarItem = ({
     id,
     icon: Icon,
     variant,
-    channelId
+    channelId,
+    onClick
 }: SidebarItemProps) => {
 
     const workspaceId = useWorkspaceId();
@@ -58,6 +60,8 @@ export const SidebarItem = ({
     size="sm"
     className={cn(sidebarItemVariants({variant: variant}))}
     asChild
+    onClick={() =>{onClick()}
+    }
     >
         <Link href={`/workspace/${workspaceId}/channel/${id}`} className='flex justify-between'>
         <div className='flex'>

@@ -14,6 +14,10 @@ import WorkspaceSection from "./workspace-section";
 import { UserItem } from "./user-item";
 import { useChannelId } from "@/hooks/use-channel-id";
 import { useMemberId } from "@/hooks/use-member-id";
+import { useMarkAsRead } from "@/features/unread/api/use-mark-as-read";
+import { UseGetConversation } from "@/features/conversations/api/use-get-conversation";
+import { useState } from "react";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 export const WorkspaceSidebar = () => {
   const memberId = useMemberId();
@@ -26,9 +30,17 @@ export const WorkspaceSidebar = () => {
   const {data: workspace, isLoading: workspaceLoading} = useGetWorkspace({id: workspaceId});
   const {data: channels, isLoading:channelsLoading} = UseGetChannels({workspaceId});
   const {data: members, isLoading: membersLoading} = useGetMembers({workspaceId});
+  const {mutate: markAsRead} = useMarkAsRead();
+
+
+  const handleRead = () => {
+    markAsRead({workspaceId, channelId},{throwError: false})
+  }
+
+  const handleReadConversation = () => {
+    
+  }
   
-
-
 
   if(workspaceLoading || memberLoading || channelsLoading || membersLoading){
     return (
@@ -76,6 +88,7 @@ export const WorkspaceSidebar = () => {
           id={item._id}
           variant={channelId == item._id ? "active" : "default"}
           channelId={item._id}
+          onClick={handleRead}
           />
         ))}
         </WorkspaceSection>
@@ -93,6 +106,7 @@ export const WorkspaceSidebar = () => {
           image={item.user.image}
           variant={item._id === memberId ? "active" : "default"}
           otherMemberId={item._id}
+          onClick={() => {}}
           />
         ))}
         </WorkspaceSection>

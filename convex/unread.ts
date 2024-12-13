@@ -124,11 +124,10 @@ export const incrementUnreadCount = mutation({
 
 export const markAsRead = mutation({
   args: {
-    memberId: v.id("members"),
     workspaceId: v.id("workspaces"),
     channelId: v.optional(v.id("channels")),
     conversationId: v.optional(v.id("conversations")),
-    lastMessageId: v.id("messages"),
+    lastMessageId: v.optional(v.id("messages")),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -147,23 +146,25 @@ export const markAsRead = mutation({
     if (!member) {
       throw new Error("Unauthorized");
     }
+    let existingUnreadRecord
 
-    const existingUnreadRecord = await ctx.db
+    if(args.channelId){
+      existingUnreadRecord = await ctx.db
       .query("unread_messages")
-      .filter((q) => q.eq(q.field("workspaceId"), args.workspaceId))
-      .filter((q) =>
-        q.or(
-          q.and(
-            q.eq(q.field("memberId"), member._id),
-            q.eq(q.field("conversationId"), args.conversationId)
-          ),
-          q.and(
-            q.eq(q.field("memberId"), member._id),
-            q.eq(q.field("channelId"), args.channelId)
-          )
-        )
-      )
-      .unique();
+      .withIndex("by_workspace_id_member_id_channel_id", (q) => 
+      q.eq("workspaceId", args.workspaceId)
+      .eq("memberId", member._id)
+      .eq("channelId", args.channelId)
+      ).unique();
+    } else if(args.conversationId){
+      existingUnreadRecord = await ctx.db
+      .query("unread_messages")
+      .withIndex("by_workspace_id_member_id_conversation_id", (q) => 
+      q.eq("workspaceId", args.workspaceId)
+      .eq("memberId", member._id)
+      .eq("conversationId", args.conversationId)
+      ).unique();
+    }
 
     if (!existingUnreadRecord) {
       throw new Error("Unread Record Not Found");
