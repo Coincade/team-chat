@@ -36,9 +36,10 @@ import { UseGetChannelMembers } from "@/features/channelmembers/api/use-get-chan
 interface HeaderProps {
   title: string;
   isCreator?: boolean;
+  type: 'private' | 'public' | undefined;
 }
 
-export const Header = ({ title, isCreator }: HeaderProps) => {
+export const Header = ({ title, isCreator, type }: HeaderProps) => {
   const router = useRouter();
   const workspaceId = useWorkspaceId();
   const channelId = useChannelId();
@@ -190,7 +191,7 @@ export const Header = ({ title, isCreator }: HeaderProps) => {
                   </form>
                 </DialogContent>
               </Dialog>
-              
+              {type === 'private' && (
               <Dialog open={editMemberOpen} onOpenChange={setEditMemberOpen}>
                 <DialogTrigger asChild>
                   <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
@@ -257,6 +258,7 @@ export const Header = ({ title, isCreator }: HeaderProps) => {
                   </div>
                 </DialogContent>
               </Dialog>
+              )}
 
               <button
                 onClick={handleDelete}

@@ -47,7 +47,9 @@ const ChannelIdPage = () => {
   return (
     <div className='flex flex-col h-full'>
       <Header title={channel.name}
-       isCreator={channel.creatorId === currentMember?._id} />
+       isCreator={channel.creatorId === currentMember?._id} 
+       type={channel.type}
+       />
       <MessageList
       channelName={channel.name}
       channelCreationTime={channel._creationTime}
