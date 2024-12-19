@@ -12,7 +12,6 @@ import { Loader, TriangleAlert } from 'lucide-react';
 import { Header } from './Header';
 import { ChatInput } from './chat-input';
 import { MessageList } from '@/components/message-list';
-import { UseGetChannelMembers } from '@/features/channelmembers/api/use-get-channel-members';
 import { useCurrentMember } from '@/features/members/api/use-current-member';
 import { useWorkspaceId } from '@/hooks/use-workspace-id';
 
@@ -20,7 +19,6 @@ const ChannelIdPage = () => {
   const channelId = useChannelId();
   const workspaceId = useWorkspaceId(); // Add this
   const { data: currentMember } = useCurrentMember({ workspaceId });
-  const { data: channelMembers } = UseGetChannelMembers({ workspaceId, channelId });
 
   const {results, status, loadMore} = useGetMessages({channelId});
   const {data: channel, isLoading: channelLoading} = UseGetChannel({id: channelId})

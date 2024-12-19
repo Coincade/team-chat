@@ -24,7 +24,7 @@ export const remove = mutation({
         .withIndex("by_workspace_id_user_id", (q) => q.eq("workspaceId", channel.workspaceId).eq("userId", userId))
         .unique();
 
-        if(!member || member.role !== "admin"){
+        if(!member || channel.creatorId !== member._id){
             throw new Error("Unauthorized");
         }
 
@@ -68,7 +68,7 @@ export const update = mutation({
         .withIndex("by_workspace_id_user_id", (q) => q.eq("workspaceId", channel.workspaceId).eq("userId", userId))
         .unique();
 
-        if(!member || member.role !== "admin"){
+        if(!member || channel.creatorId !== member._id){
             throw new Error("Unauthorized");
         }
 
@@ -98,7 +98,7 @@ export const create = mutation({
         .withIndex("by_workspace_id_user_id", (q) => q.eq("workspaceId", args.workspaceId).eq("userId", userId))
         .unique();
 
-        if(!member || member.role !== "admin"){
+        if(!member){
             throw new Error("Unauthorized");
         }
 
@@ -196,17 +196,11 @@ export const get = query({
 
         const privateChannels = await Promise.all(
             privateChannelIds.map(id => ctx.db.get(id))
-        );
-
-        console.log('Public channels:', publicChannels);
-        console.log('Private channel memberships:', privateChannelMemberships);
-        console.log('Private channels:', privateChannels);
+        ).then(channels => channels.filter(channel => 
+            channel && channel.type === "private"  // Only include private channels
+        ));
         
-        return [...publicChannels, ...privateChannels.filter(Boolean)];
-
-        // Combine public and private channels, filtering out any null values
-        // from private channels (in case any were deleted)
-        return [...publicChannels, ...privateChannels.filter(Boolean)];
+        return [...publicChannels, ...privateChannels];
     }
 })
 

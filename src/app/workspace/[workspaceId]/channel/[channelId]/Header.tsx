@@ -22,7 +22,13 @@ import { useRouter } from "next/navigation";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { useGetMembers } from "@/features/members/api/use-get-members";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useCreateChannelMember } from "@/features/channelmembers/api/use-create-channel-member";
 import { Id } from "../../../../../../convex/_generated/dataModel";
 import { UseGetChannelMembers } from "@/features/channelmembers/api/use-get-channel-members";
@@ -42,23 +48,26 @@ export const Header = ({ title, isCreator }: HeaderProps) => {
   );
 
   const [value, setValue] = useState(title);
-  const [selectedMemberId, setSelectedMemberId] = useState<Id<"members"> | null>(null);
+  const [selectedMemberId, setSelectedMemberId] =
+    useState<Id<"members"> | null>(null);
   const [editOpen, setEditOpen] = useState(false);
+  const [editMemberOpen, setEditMemberOpen] = useState(false);
 
-  const { data: member } = useCurrentMember({ workspaceId });
   const { mutate: updateChannel, isPending: isUpdatingChannel } =
     useUpdateChannel();
   const { mutate: removeChannel, isPending: isRemovingChannel } =
     useRemoveChannel();
-    const { mutate: createChannelMember, isPending: isCreatingChannelMember } = useCreateChannelMember();
+  const { mutate: createChannelMember, isPending: isCreatingChannelMember } =
+    useCreateChannelMember();
 
-    const { data: members } = useGetMembers({ workspaceId });
-    const { data: channelMembers } = UseGetChannelMembers({ workspaceId, channelId });
-
-    
+  const { data: members } = useGetMembers({ workspaceId });
+  const { data: channelMembers } = UseGetChannelMembers({
+    workspaceId,
+    channelId,
+  });
 
   const handleEditOpen = (value: boolean) => {
-    if (member?.role !== "admin") return;
+    if (!isCreator) return;
     setEditOpen(value);
   };
 
@@ -105,22 +114,22 @@ export const Header = ({ title, isCreator }: HeaderProps) => {
   };
 
   const handleMemberSelect = (memberId: Id<"members">) => {
-
-    createChannelMember({
-      channelId,
-      workspaceId,
-      memberId,
-    },
-    {
-      onSuccess: () => {
-        toast.success("Member Added");
-        setEditOpen(false);
+    createChannelMember(
+      {
+        channelId,
+        workspaceId,
+        memberId,
       },
-      onError: () => {
-        toast.error("Failed to Add Member");
-      },
-    }
-  );
+      {
+        onSuccess: () => {
+          toast.success("Member Added");
+          setEditOpen(false);
+        },
+        onError: () => {
+          toast.error("Failed to Add Member");
+        },
+      }
+    );
   };
 
   return (
@@ -141,103 +150,114 @@ export const Header = ({ title, isCreator }: HeaderProps) => {
           <DialogHeader className="p-4 border-b bg-white">
             <DialogTitle># {title}</DialogTitle>
           </DialogHeader>
-          <div className="px-4 pb-4 flex flex-col gap-y-2">
-            <Dialog open={editOpen} onOpenChange={handleEditOpen}>
-              <DialogTrigger asChild>
-                <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">Channel Name</p>
-                    {member?.role === "admin" && (
-                      <p className="text-sm text-[#1264a3] hover:underline font-semibold">
-                        Edit
-                      </p>
-                    )}
+          {isCreator && (
+            <div className="px-4 pb-4 flex flex-col gap-y-2">
+              <Dialog open={editOpen} onOpenChange={handleEditOpen}>
+                <DialogTrigger asChild>
+                  <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold">Channel Name</p>
+                        <p className="text-sm text-[#1264a3] hover:underline font-semibold">
+                          Edit
+                        </p>
+                    </div>
+                    <p className="text-sm"># {title}</p>
                   </div>
-                  <p className="text-sm"># {title}</p>
-                </div>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Rename This Channel</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <Input
-                    value={value}
-                    disabled={isUpdatingChannel}
-                    onChange={handleChange}
-                    required
-                    autoFocus
-                    minLength={3}
-                    maxLength={80}
-                    placeholder="e.g. plan-budget"
-                  />
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline" disabled={isUpdatingChannel}>
-                        Cancel
-                      </Button>
-                    </DialogClose>
-                    <Button disabled={isUpdatingChannel}>Save</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
-            {
-              isCreator &&
-              //TODO: COndition to check if user is channel admin
-              (<Dialog open={editOpen} onOpenChange={handleEditOpen}>
-              <DialogTrigger asChild>
-                <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">Add a member</p>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Rename This Channel</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <Input
+                      value={value}
+                      disabled={isUpdatingChannel}
+                      onChange={handleChange}
+                      required
+                      autoFocus
+                      minLength={3}
+                      maxLength={80}
+                      placeholder="e.g. plan-budget"
+                    />
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline" disabled={isUpdatingChannel}>
+                          Cancel
+                        </Button>
+                      </DialogClose>
+                      <Button disabled={isUpdatingChannel}>Save</Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+              
+              <Dialog open={editMemberOpen} onOpenChange={setEditMemberOpen}>
+                <DialogTrigger asChild>
+                  <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold">Add a member</p>
                       <p className="text-sm text-[#1264a3] hover:underline font-semibold">
                         Add
                       </p>
+                    </div>
+                    <p className="text-sm"># {title}</p>
                   </div>
-                  <p className="text-sm"># {title}</p>
-                </div>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add a member</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                <Select onValueChange={(value) => setSelectedMemberId(value as Id<"members">)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a member" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {members?.filter(member => 
-                        !channelMembers?.some(channelMember => 
-                          channelMember.memberId === member._id
-                        )
-                      ).map((member) => (
-                        <SelectItem key={member._id} value={member._id}>
-                          {member.user.name || member.user.email}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline" disabled={isCreatingChannelMember}>
-                        Cancel
-                      </Button>
-                    </DialogClose>
-                    {selectedMemberId === null ? 
-                    <Button disabled={true} className="cursor-none">Add Member</Button>
-                    :
-                    <Button 
-                    onClick={() => handleMemberSelect(selectedMemberId)}
-                    disabled={isCreatingChannelMember}>Add Member</Button>
-                  }
-                  </DialogFooter>
-                </div>
-              </DialogContent>
-            </Dialog>)
-            }
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add a member</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <Select
+                      onValueChange={(value) =>
+                        setSelectedMemberId(value as Id<"members">)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a member" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {members
+                          ?.filter(
+                            (member) =>
+                              !channelMembers?.some(
+                                (channelMember) =>
+                                  channelMember.memberId === member._id
+                              )
+                          )
+                          .map((member) => (
+                            <SelectItem key={member._id} value={member._id}>
+                              {member.user.name || member.user.email}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button
+                          variant="outline"
+                          disabled={isCreatingChannelMember}
+                        >
+                          Cancel
+                        </Button>
+                      </DialogClose>
+                      {selectedMemberId === null ? (
+                        <Button disabled={true} className="cursor-none">
+                          Add Member
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => handleMemberSelect(selectedMemberId)}
+                          disabled={isCreatingChannelMember}
+                        >
+                          Add Member
+                        </Button>
+                      )}
+                    </DialogFooter>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-            {member?.role === "admin" && (
               <button
                 onClick={handleDelete}
                 disabled={isRemovingChannel}
@@ -246,8 +266,9 @@ export const Header = ({ title, isCreator }: HeaderProps) => {
                 <TrashIcon className="size-4" />
                 <p className="text-sm font-semibold">Delete channel</p>
               </button>
-            )}
-          </div>
+
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
