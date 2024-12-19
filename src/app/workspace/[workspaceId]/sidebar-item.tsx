@@ -64,7 +64,7 @@ export const SidebarItem = ({
     }
     >
         <Link href={`/workspace/${workspaceId}/channel/${id}`} className='flex justify-between'>
-        <div className='flex'>
+        <div className='flex items-center'>
             <Icon className='size-3.5 mr-1 shrink-0'/>
             <span className='text-sm truncate'>{label}</span>
             </div>

@@ -20,8 +20,19 @@ const schema = defineSchema({
   channels:defineTable({
     name: v.string(),
     workspaceId: v.id("workspaces"),
+    type: v.optional(v.union(v.literal("public"), v.literal("private"))),
+    creatorId: v.optional(v.id("members")),
   })
   .index("by_workspace_id", ["workspaceId"]),
+  channel_members: defineTable({
+    channelId: v.id("channels"),
+    memberId: v.id("members"),
+    workspaceId: v.id("workspaces"),
+  })
+  .index("by_channel_id", ["channelId"])
+  .index("by_member_id", ["memberId"])
+  .index("by_workspace_id", ["workspaceId"])
+  .index("by_channel_id_member_id", ["channelId", "memberId"]),
   conversations: defineTable({
     workspaceId: v.id("workspaces"),
     memberOneId: v.id("members"),

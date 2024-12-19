@@ -6,7 +6,7 @@ import { useCreateChannelModal } from "@/features/channels/store/use-create-chan
 
 import { useWorkspaceId } from "@/hooks/use-workspace-id"
 
-import { AlertTriangle, HashIcon, Loader, MessageSquareText, SendHorizontal } from "lucide-react";
+import { AlertTriangle, HashIcon, Loader, LockIcon, MessageSquareText, SendHorizontal } from "lucide-react";
 
 import { WorkspaceHeader } from "./workspace-header";
 import { SidebarItem } from "./sidebar-item";
@@ -35,10 +35,6 @@ export const WorkspaceSidebar = () => {
 
   const handleRead = () => {
     markAsRead({workspaceId, channelId},{throwError: false})
-  }
-
-  const handleReadConversation = () => {
-    
   }
   
 
@@ -81,15 +77,17 @@ export const WorkspaceSidebar = () => {
         onNew={member.role === "admin" ?()=>setOpen(true) : undefined}
         >
         {channels?.map((item) => (
+          item && (
           <SidebarItem 
           key={item._id}
-          icon={HashIcon}
+          icon={item.type === "public" ? HashIcon : LockIcon}
           label={item.name}
           id={item._id}
           variant={channelId == item._id ? "active" : "default"}
           channelId={item._id}
           onClick={handleRead}
           />
+          )
         ))}
         </WorkspaceSection>
 
