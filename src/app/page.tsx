@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 
 import { useGetWorkspaces } from "@/features/workspaces/api/use-get-workspaces";
 import { useCreateWorkspaceModal } from "@/features/workspaces/store/use-create-workspace-modal";
@@ -37,8 +37,23 @@ export default function Home() {
     );
   };
 
+  const requestNotificationPermission = useCallback(async () => {
+    if (!("Notification" in window)) {
+      toast.error("This browser does not support notifications");
+      return;
+    }
+
+    if (Notification.permission !== "granted") {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        toast.success("Notifications enabled");
+      }
+    }
+  }, []);
+
 
   useEffect(()=>{
+    requestNotificationPermission();
     if(isLoading || isPending) return;
 
     if(workspaceId){
@@ -50,7 +65,7 @@ export default function Home() {
     else{
       handleJoin(default_workspace_id as Id<"workspaces">, default_workspace_joincode as string);
     }
-  },[workspaceId, isLoading, isPending, open, setOpen, router]);
+  },[requestNotificationPermission,workspaceId, isLoading, isPending, open, setOpen, router]);
 
 
   return (

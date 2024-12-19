@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useWorkspaceId } from '@/hooks/use-workspace-id';
 import { UseGetConversation } from '@/features/conversations/api/use-get-conversation';
 import { UseGetUnreadCount } from '@/features/unread/api/use-get-unread-count';
+import { useEffect } from 'react';
 
 const userItemVariants = cva(
     "flex items-center gap-1.5 justify-start font-normal h-7 px-4 text-sm overflow-hidden",{
@@ -54,13 +55,28 @@ export const UserItem = ({
       conversationId: conversationId ?? undefined, 
     });
     
-    // const getUnreadCount = (id: Id<"channels"> | Id<"conversations">, type: 'channel' | 'conversation') => {
-    //   return unreadCounts?.find(count => 
-    //     type === 'channel' 
-    //       ? count.channelId === id 
-    //       : count.conversationId === id
-    //   )?.unreadCount || 0;
-    // };
+    useEffect(() => {
+      if (unreadCount?.unreadCount && unreadCount.unreadCount > 0) {
+          if (Notification.permission !== 'granted') {
+              Notification.requestPermission();
+          }
+          
+          if (Notification.permission === 'granted') {
+              const notification = new Notification('New Direct Message', {
+                  body: `You have ${unreadCount.unreadCount} unread message${unreadCount.unreadCount > 1 ? 's' : ''} from ${label}`,
+                  icon: image || '/your-app-icon.png', // Uses user's avatar if available
+                  tag: `conversation-${conversationId}`, // Prevents duplicate notifications
+              });
+  
+              notification.onclick = (event) => {
+                  event.preventDefault();
+                  window.focus();
+                  window.location.href = `/workspace/${workspaceId}/member/${id}`;
+                  notification.close();
+              };
+          }
+      }
+    }, [unreadCount, conversationId, label, workspaceId, id, image]);
 
     if(unreadCountLoading || conversationIdLoading) {
       return null;

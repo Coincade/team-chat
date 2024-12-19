@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useWorkspaceId } from '@/hooks/use-workspace-id';
 import { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { IconType } from 'react-icons/lib';
 
 import { cva, type VariantProps} from "class-variance-authority";
@@ -53,6 +53,35 @@ export const SidebarItem = ({
           : count.conversationId === id
       )?.unreadCount || 0;
     };
+
+    useEffect(() => {
+      const unreadCount = getUnreadCount(channelId, 'channel');
+      
+      if (unreadCount > 0) {
+          if (Notification.permission !== 'granted') {
+              Notification.requestPermission();
+          }
+          
+          if (Notification.permission === 'granted') {
+              const notification = new Notification('New Message', {
+                  body: `You have ${unreadCount} unread message${unreadCount > 1 ? 's' : ''} in #${label}`,
+                  icon: '/your-app-icon.png',
+                  tag: `channel-${channelId}`, // Prevents duplicate notifications
+              });
+  
+              // Add click handler to the notification
+              notification.onclick = (event) => {
+                  event.preventDefault();
+                  // Focus on the window if minimized
+                  window.focus();
+                  // Navigate to the channel
+                  window.location.href = `/workspace/${workspaceId}/channel/${id}`;
+                  // Close the notification
+                  notification.close();
+              };
+          }
+      }
+  }, [unreadCounts, channelId, label, workspaceId, id]);
 
   return (
     <Button
