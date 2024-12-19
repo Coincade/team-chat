@@ -85,7 +85,7 @@ export const WorkspaceSidebar = () => {
           id={item._id}
           variant={channelId == item._id ? "active" : "default"}
           channelId={item._id}
-          onClick={handleRead}
+          onClick={() => {}}
           />
           )
         ))}

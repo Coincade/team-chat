@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { UseGetChannel } from '@/features/channels/api/use-get-channel';
 import { useGetMessages } from '@/features/messages/api/use-get-messages';
@@ -14,6 +14,7 @@ import { ChatInput } from './chat-input';
 import { MessageList } from '@/components/message-list';
 import { useCurrentMember } from '@/features/members/api/use-current-member';
 import { useWorkspaceId } from '@/hooks/use-workspace-id';
+import { useMarkAsRead } from '@/features/unread/api/use-mark-as-read';
 
 const ChannelIdPage = () => {
   const channelId = useChannelId();
@@ -22,8 +23,19 @@ const ChannelIdPage = () => {
 
   const {results, status, loadMore} = useGetMessages({channelId});
   const {data: channel, isLoading: channelLoading} = UseGetChannel({id: channelId})
+  const {mutate: markAsRead} = useMarkAsRead();
 
   // console.log("Results: ", results);
+
+  useEffect(() => {
+    channelId &&
+    markAsRead({
+      workspaceId,
+      channelId,
+    },
+  {throwError: false}
+  )
+  }, [workspaceId, channelId]);
   
 
   if(channelLoading || status === "LoadingFirstPage") {
