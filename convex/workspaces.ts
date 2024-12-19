@@ -102,7 +102,7 @@ export const create = mutation({
 
         // const workspace = await ctx.db.get(workspaceId);
 
-        await ctx.db.insert("members", {
+        const memberId =await ctx.db.insert("members", {
             userId,
             workspaceId,
             role: "admin"
@@ -110,7 +110,9 @@ export const create = mutation({
 
         await ctx.db.insert("channels", {
             name: "general",
-            workspaceId
+            workspaceId,
+            type: "public",
+            creatorId: memberId
         })
 
         return workspaceId;
