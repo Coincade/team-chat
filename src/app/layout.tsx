@@ -8,6 +8,7 @@ import { Modal } from "@/components/modals";
 import { Toaster } from "@/components/ui/sonner";
 import { JotaiProvider } from "@/components/jotai-provider";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import Provider from "./provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,8 +22,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Team Chat",
+  title: "Intercom",
   description: "Team Chat App",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -39,9 +41,11 @@ export default function RootLayout({
           <ConvexClientProvider>
             <JotaiProvider>
             <NuqsAdapter>
+              <Provider>
               <Toaster />
               <Modal />
               {children}
+              </Provider>
               </NuqsAdapter>
             </JotaiProvider>
           </ConvexClientProvider>
