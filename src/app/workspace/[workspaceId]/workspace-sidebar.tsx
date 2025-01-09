@@ -15,9 +15,9 @@ import { UserItem } from "./user-item";
 import { useChannelId } from "@/hooks/use-channel-id";
 import { useMemberId } from "@/hooks/use-member-id";
 import { useMarkAsRead } from "@/features/unread/api/use-mark-as-read";
-import { UseGetConversation } from "@/features/conversations/api/use-get-conversation";
-import { useState } from "react";
-import { Id } from "../../../../convex/_generated/dataModel";
+import { useUpdatePresence } from "@/features/presence/api/use-update-presence";
+import { useEffect } from "react";
+
 
 export const WorkspaceSidebar = () => {
   const memberId = useMemberId();
@@ -31,6 +31,21 @@ export const WorkspaceSidebar = () => {
   const {data: channels, isLoading:channelsLoading} = UseGetChannels({workspaceId});
   const {data: members, isLoading: membersLoading} = useGetMembers({workspaceId});
   const {mutate: markAsRead} = useMarkAsRead();
+
+  const { mutate: updatePresence } = useUpdatePresence();
+
+
+  useEffect(() => {
+    // Initial presence update
+    updatePresence({ workspaceId });
+
+    // Update presence every 30 seconds
+    const interval = setInterval(() => {
+      updatePresence({ workspaceId });
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [workspaceId, updatePresence]);
 
 
   const handleRead = () => {

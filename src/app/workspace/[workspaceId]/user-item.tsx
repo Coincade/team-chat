@@ -10,20 +10,20 @@ import { useWorkspaceId } from '@/hooks/use-workspace-id';
 import { UseGetConversation } from '@/features/conversations/api/use-get-conversation';
 import { UseGetUnreadCount } from '@/features/unread/api/use-get-unread-count';
 import { useEffect } from 'react';
+import { UseGetPresence } from '@/features/presence/api/use-get-presence';
 
 const userItemVariants = cva(
-    "flex items-center gap-1.5 justify-start font-normal h-7 px-4 text-sm overflow-hidden",{
-        variants:{
-            variant:{
-                default: "text-[#f9edffcc]",
-                active: "text-[#481349] bg-white/90 hover:bg-white/90",
-
-            }
-        },
-        defaultVariants:{
-            variant:"default"
-        }
-    }
+  "flex items-center gap-1.5 justify-start font-normal h-7 px-4 text-sm overflow-hidden",{
+      variants:{
+          variant:{
+              default: "text-[#f9edffcc]",
+              active: "text-[#481349] bg-white/90 hover:bg-white/90",
+          }
+      },
+      defaultVariants:{
+          variant:"default"
+      }
+  }
 )
 
 interface UserItemProps{
@@ -45,6 +45,11 @@ export const UserItem = ({
 }: UserItemProps) => {
     const workspaceId = useWorkspaceId();
     const avatarFallback = label.charAt(0).toUpperCase();
+
+    const { data: presence, isLoading: presenceLoading } = UseGetPresence({
+      memberId: otherMemberId,
+      workspaceId
+    });
 
     const {data: conversationId, isLoading: conversationIdLoading} = UseGetConversation({memberId:otherMemberId, workspaceId});
     const {
@@ -78,36 +83,45 @@ export const UserItem = ({
       }
     }, [unreadCount, conversationId, label, workspaceId, id, image]);
 
-    if(unreadCountLoading || conversationIdLoading) {
+    if(unreadCountLoading || conversationIdLoading || presenceLoading) {
       return null;
     }
 
-  return (
-    <Button
-    variant="transparent"
-    className={cn(userItemVariants({variant: variant}))}
-    size="sm"
-    asChild
-    onClick={() => onClick()}
-    >
+    const isOnline = !!presence?._id;
+
+    return (
+      <Button
+        variant="transparent"
+        className={cn(userItemVariants({variant: variant}))}
+        size="sm"
+        asChild
+        onClick={() => onClick()}
+      >
         <Link href={`/workspace/${workspaceId}/member/${id}`} className='flex justify-between'>
-        <div className='flex'>
-            <Avatar className='size-5 rounded-md mr-1'>
+          <div className='flex'>
+            <div className="relative">
+              <Avatar className='size-5 rounded-md mr-1'>
                 <AvatarImage className='rounded-md' src={image}/>
                 <AvatarFallback className='rounded-md bg-sky-500 text-white text-xs'>
-                    {avatarFallback}
+                  {avatarFallback}
                 </AvatarFallback>
-            </Avatar>
-            <span className='text-sm truncate'>{label}</span>
+              </Avatar>
+              <div 
+                className={cn(
+                  "absolute bottom-0 right-0 w-2 h-2 rounded-full border border-[#1E1F22]",
+                  isOnline ? "bg-emerald-500" : "bg-gray-300/80 border-none"
+                )}
+              />
             </div>
-            {conversationId && unreadCount &&(
-            <span className=" bg-rose-500 text-white rounded-full px-2 text-center">
+            <span className='text-sm truncate'>{label}</span>
+          </div>
+          {conversationId && unreadCount && (
+            <span className="bg-rose-500 text-white rounded-full px-2 text-center">
               {unreadCount.unreadCount > 0 && unreadCount.unreadCount}
             </span>
           )}
         </Link>
-
-    </Button>
-  )
+      </Button>
+    );
 }
 

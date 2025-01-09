@@ -78,7 +78,15 @@ const schema = defineSchema({
   .index("by_workspace_id", ["workspaceId"])
   .index("by_workspace_id_member_id", ["workspaceId", "memberId"])
   .index("by_workspace_id_member_id_channel_id", ["workspaceId", "memberId", "channelId"])
-  .index("by_workspace_id_member_id_conversation_id", ["workspaceId", "memberId", "conversationId"])
+  .index("by_workspace_id_member_id_conversation_id", ["workspaceId", "memberId", "conversationId"]),
+  presence: defineTable({
+    memberId: v.id("members"),
+    workspaceId: v.id("workspaces"),
+    lastSeen: v.number(),
+  })
+  .index("by_member_id", ["memberId"])
+  .index("by_workspace_id", ["workspaceId"])
+  .index("by_workspace_id_member_id", ["workspaceId", "memberId"])
 });
  
 export default schema;
