@@ -62,24 +62,40 @@ export const UserItem = ({
     
     useEffect(() => {
       if (unreadCount?.unreadCount && unreadCount.unreadCount > 0) {
-          if (Notification.permission !== 'granted') {
-              Notification.requestPermission();
-          }
+        const showNotification = () => {
+          const notification = new Notification("New Direct Message", {
+            body: `You have ${unreadCount.unreadCount} unread message${unreadCount.unreadCount > 1 ? "s" : ""} from ${label}`,
+            icon: image || "/logo.png",
+            tag: `conversation-${conversationId}`,
+            silent: true, // Set to true to prevent default sound
+          });
+    
+          notification.onclick = (event) => {
+            event.preventDefault();
+            window.focus();
+            window.location.href = `/workspace/${workspaceId}/member/${id}`;
+            notification.close();
+          };
+        };
+    
+        // Check if we can show notifications
+        if (Notification.permission === "granted") {
+          // Create audio element
+          const audio = new Audio("/ping.mp3"); // Make sure this path is correct
           
-          if (Notification.permission === 'granted') {
-              const notification = new Notification('New Direct Message', {
-                  body: `You have ${unreadCount.unreadCount} unread message${unreadCount.unreadCount > 1 ? 's' : ''} from ${label}`,
-                  icon: image || '/your-app-icon.png', // Uses user's avatar if available
-                  tag: `conversation-${conversationId}`, // Prevents duplicate notifications
-              });
-  
-              notification.onclick = (event) => {
-                  event.preventDefault();
-                  window.focus();
-                  window.location.href = `/workspace/${workspaceId}/member/${id}`;
-                  notification.close();
-              };
-          }
+          // Try to play sound, show notification regardless of sound success
+          audio.play()
+            .catch((error) => console.log("Error playing sound:", error))
+            .finally(() => showNotification());
+        } else if (Notification.permission !== "denied") {
+          // Request permission if not denied
+          Notification.requestPermission()
+            .then(permission => {
+              if (permission === "granted") {
+                showNotification();
+              }
+            });
+        }
       }
     }, [unreadCount, conversationId, label, workspaceId, id, image]);
 
