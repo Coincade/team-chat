@@ -76,11 +76,8 @@ export const Header = ({ title, isCreator, type }: HeaderProps) => {
     const value = e.target.value.replace(/\s+/g, "-").toLowerCase();
     setValue(value);
   };
-
   const handleDelete = async () => {
-    const ok = await window.confirm(
-      "Are you sure you want to delete this channel?"
-    );
+    const ok = await confirm();
     if (!ok) return;
 
     removeChannel(

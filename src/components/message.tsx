@@ -92,7 +92,7 @@ export const Message = ({
   }
 
   const handleRemove = async() => {
-    const ok = await window.confirm("Are you sure you want to delete this message?");
+    const ok = await confirm();
 
     if(!ok) return;
 

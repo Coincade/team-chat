@@ -42,7 +42,7 @@ export const PreferencesModal = ({ open, setOpen, initialValue }: PreferencesMod
     const { mutate: removeWorkspace, isPending: isRemovingWorkspace } = useRemoveWorkspace();
 
     const handleRemove = async() => {
-        const ok = await window.confirm();
+        const ok = await confirm();
         
         if(!ok) return;
 

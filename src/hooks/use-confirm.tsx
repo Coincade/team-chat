@@ -33,7 +33,7 @@ export const useConfirm = (
         handleclose();
     }
 
-    const ConfirmDialog : any = () => {
+    const ConfirmDialog: any = () => (
         <Dialog open={promise !== null}>
             <DialogContent>
                 <DialogHeader>
@@ -59,7 +59,7 @@ export const useConfirm = (
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    }
+    )
 
     return[ConfirmDialog, confirm]
 }

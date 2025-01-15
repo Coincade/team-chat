@@ -59,7 +59,7 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
     useRemoveMember();
 
   const onRemove = async() => {
-    const ok = await window.confirm("Are you sure you want to remove this member?")
+    const ok = await confirmRemove()
     if(!ok) return;
 
     removeMember(
@@ -77,7 +77,7 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
   };
 
   const onLeave = async() => {
-    const ok = await window.confirm("Are you sure you want to leave this workspace?")
+    const ok = await confirmLeave()
     if(!ok) return;
 
     removeMember(
@@ -96,7 +96,7 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
   };
 
   const onUpdate = async(role: "admin" | "member") => {
-    const ok = await window.confirm("Are you sure you want to change this member's role?");
+    const ok = await confirmUpdate();
     if(!ok) return;
 
     updateMember(

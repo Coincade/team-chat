@@ -30,7 +30,7 @@ export const InviteModal = ({
 
     const workspaceId = useWorkspaceId();
 
-    const [ConfirmDialog, _confirm] = useConfirm(
+    const [ConfirmDialog, confirm] = useConfirm(
         "Are you Sure?",
         "This will deactivate the current invite code and generate a new one"
     );
@@ -38,7 +38,7 @@ export const InviteModal = ({
     const {mutate, isPending} = useNewJoinCode();
 
     const handleNewCode = async() => {
-        const ok = await window.confirm("Are you Sure You want to generate a new code and invalidate the old one?");
+        const ok = await confirm();
 
         if(!ok) return;
 
