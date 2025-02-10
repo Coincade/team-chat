@@ -16,8 +16,15 @@ const Renderer = ({value}: RendererProps) =>{
         const container = rendererRef.current;
 
         const quill = new Quill(document.createElement("div"), {
-            theme: "snow"
+            theme: "snow",
+            modules: {
+                toolbar: false,
+                clipboard: false,
+            },
+            formats: ['bold', 'italic', 'link', 'list', 'bullet']
         });
+
+
 
         quill.enable(false);
 
