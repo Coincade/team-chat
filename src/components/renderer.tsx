@@ -21,7 +21,7 @@ const Renderer = ({value}: RendererProps) =>{
                 toolbar: false,
                 clipboard: false,
             },
-            formats: ['bold', 'italic', 'link', 'list']
+            formats: ['bold', 'italic', 'link', 'list', 'image']
         });
 
 
