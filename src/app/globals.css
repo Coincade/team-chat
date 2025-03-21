@@ -74,12 +74,32 @@ body {
   }
 }
 
+
+
+@font-face {
+  font-family: 'Righteous' ;
+  src: url(/src/assets/fonts/Righteous/Righteous/Righteous-Regular.ttf) ;
+  src: url(/src/assets/fonts/Righteous/Righteous/Righteous-Regular.ttf);
+  font-weight: 400; /* normal */
+  font-style: normal;
+}
+
+
+
+@font-face {
+  font-family: 'Satoshi' ;
+  src: url(/src/assets/fonts/Satoshi_Complete/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Black.eot);
+  font-weight: 400; 
+  font-style: normal;
+}
+
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background ;
   }
 }
 
@@ -94,7 +114,7 @@ body {
 }
 
 .ql-container{
-  font-family: "Lato", sans-serif !important;
+  /* font-family: "Lato", sans-serif !important; */
   border: none !important;
   height: unset !important;
 }
@@ -104,7 +124,7 @@ body {
   padding: 8px 12px !important;
   color: #1d1c1d !important;
   font-weight: 400 !important;
-  font-family: "Lato", sans-serif !important;
+  /* font-family: "Lato", sans-serif !important; */
   font-size: 14px !important;
 }
 
@@ -122,9 +142,9 @@ body {
 
 .ql-editor:before{
   left: 12px !important;
-  font-family: "Lato", sans-serif !important;
+  /* font-family: "Lato", sans-serif !important; */
   color: #8d8d8d !important;
-  font-style: normal !important;
+  /* font-style: normal !important; */
   font-size: 14px !important;
   font-weight: 400 !important;
   @apply truncate;

@@ -16,6 +16,7 @@ import { Thread } from "@/features/messages/components/thread";
 import { Profile } from "@/features/members/components/profile";
 
 import { usePanel } from "@/hooks/use-panel";
+import SideBar from "@/components/jibber-component/sidebar";
 
 interface WorkspaceIdLayoutProps {
   children: React.ReactNode;
@@ -31,7 +32,8 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
       <Toolbar />
       <div className="flex h-[calc(100vh-40px)]">
         <Sidebar />
-        <ResizablePanelGroup direction="horizontal" autoSave="workspace-layout">
+        <SideBar/>
+        {/* <ResizablePanelGroup direction="horizontal" autoSave="workspace-layout">
           <ResizablePanel
             defaultSize={20}
             minSize={11}
@@ -65,7 +67,7 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
               </ResizablePanel>
             </>
           )}
-        </ResizablePanelGroup>
+        </ResizablePanelGroup> */}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { UseGetChannels } from "@/features/channels/api/use-get-channels";
 import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useCreateChannelModal } from "@/features/channels/store/use-create-channel-modal";
 
+
 import { useWorkspaceId } from "@/hooks/use-workspace-id"
 
 import { AlertTriangle, HashIcon, Loader, LockIcon, MessageSquareText, SendHorizontal } from "lucide-react";
@@ -17,6 +18,8 @@ import { useMemberId } from "@/hooks/use-member-id";
 import { useMarkAsRead } from "@/features/unread/api/use-mark-as-read";
 import { useUpdatePresence } from "@/features/presence/api/use-update-presence";
 import { useEffect } from "react";
+
+// import Arrowsback from "@/assets/icon_pack/arrows-back.svg"
 
 
 export const WorkspaceSidebar = () => {
@@ -85,7 +88,9 @@ export const WorkspaceSidebar = () => {
         id="threads"
         />
         </div> */}
-        
+
+        {/* <Arrowsback width={20} height={12} /> */}
+
         <WorkspaceSection
         label="Channels"
         hint="New channel"

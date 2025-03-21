@@ -20,6 +20,10 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const Righteous = localFont({
+  src: "../assets/fonts/Righteous/Righteous/Righteous-Regular.ttf"
+})
+
 export const metadata: Metadata = {
   title: "Team Chat",
   description: "Team Chat App",
@@ -34,7 +38,7 @@ export default function RootLayout({
     <ConvexAuthNextjsServerProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} ${Righteous} antialiased`}
         >
           <ConvexClientProvider>
             <JotaiProvider>
