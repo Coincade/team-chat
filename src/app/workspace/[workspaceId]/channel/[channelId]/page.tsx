@@ -57,7 +57,7 @@ const ChannelIdPage = () => {
 
 
   return (
-    <div className="flex flex-col h-[93%] rounded-2xl bg-white mt-[5px] mb-[20px] mr-[20px] " >
+    <div className="flex flex-col h-[93%] rounded-2xl bg-white mt-[5px] mb-[20px] mr-[20px]" >
         <Header title={channel.name}
         isCreator={channel.creatorId === currentMember?._id} 
         type={channel.type}

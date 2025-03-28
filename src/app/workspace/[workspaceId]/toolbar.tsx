@@ -41,13 +41,13 @@ export const Toolbar = () => {
   };
 
   return (
-    <nav className="bg-hirect-sidebar flex items-center text-center justify-between h-12 p-1.5   ">
+    <nav className="bg-hirect-sidebar flex items-center text-center justify-between h-12 p-1.5">
       <div className=" ml-4 flex text-white font-bold items-center  ">
         <h1 className=" mr-[20px] text-2xl">Jibbr</h1>
         <WorkspaceSwitcher />
       </div>
 
-      <div className="ml-auto flex items-center    ">
+      <div className="ml-auto flex items-center">
         <div className="  mr-[20px] min-w-[280px] max-w-[642px] ">
           <Button
             onClick={() => setOpen(true)}
