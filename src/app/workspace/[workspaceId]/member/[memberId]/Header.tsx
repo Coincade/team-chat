@@ -17,12 +17,12 @@ export const Header = ({
   const avatarFallback = memberName.charAt(0).toUpperCase();
 
   return (
-    <div className="bg-white border-b h-[49px] flex items-center px-4 overflow-hidden">
-      <Button variant="ghost" className="text-lg font-semibold px-2 overflow-hidden w-auto"
+    <div className=" bg-[#0369a1] border-b  h-[49px] flex items-center px-4 overflow-hidden rounded-t-2xl text-white">
+      <Button variant="ghost" className="text-lg font-semibold px-2 overflow-hidden w-auto "
       size="sm"
       onClick={onClick}
       >
-        <Avatar className="size-6 mr-2">
+        <Avatar className="size-6 mr-2 ">
           <AvatarImage src={memberImage}/>
           <AvatarFallback className="flex h-full w-full items-center justify-center rounded-md bg-sky-500 text-white text-sm">
             {avatarFallback}

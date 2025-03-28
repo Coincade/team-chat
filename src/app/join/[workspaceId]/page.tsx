@@ -55,7 +55,7 @@ const JoinPage = () => {
   }
 
   return (
-    <div className="h-full flex flex-col gap-y-8 items-center justify-center bg-white p-8 rounded-lg shadow-md">
+    <div className="h-full flex flex-col gap-y-8 items-center justify-center bg-white p-8 rounded-lg shadow-md ">
       <Image src="/logo.png" alt="Logo" width={60} height={60} />
       <div className="flex flex-col gap-y-4 items-center justify-center max-w-md">
         <div className="flex flex-col gap-y-2 items-center justify-center">
@@ -72,7 +72,7 @@ const JoinPage = () => {
             character:
               "uppercase h-auto rounded-md border border-gray-300 flex items-center justify-center text-lg font-medium text-gray-500",
             characterInactive: "bg-muted",
-            characterSelected: "bg-white text-black",
+            characterSelected: "bg-white text-black border ",
             characterFilled: "bg-white text-black",
           }}
           autoFocus

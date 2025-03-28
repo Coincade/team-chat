@@ -24,10 +24,10 @@ export const UserButton = () => {
     const avatarFallback = name!.charAt(0).toUpperCase()
     return (
         <DropdownMenu modal={false}>
-            <DropdownMenuTrigger className="outline-none relative">
-                <Avatar className="rounded-md size-10 hover:opacity-75 transition">
-                    <AvatarImage alt={name} src={image} className="rounded-md"/>
-                    <AvatarFallback className="rounded-md bg-sky-600 text-white">
+            <DropdownMenuTrigger className="outline-none relative rounded-full ">
+                <Avatar className="rounded-full size-10 hover:opacity-75 transition">
+                    <AvatarImage alt={name} src={image} className="rounded-full"/>
+                    <AvatarFallback className="rounded-full bg-sky-600 text-white">
                         {avatarFallback}
                     </AvatarFallback>
                 </Avatar>

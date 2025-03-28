@@ -131,7 +131,7 @@ export const Header = ({ title, isCreator, type }: HeaderProps) => {
   };
 
   return (
-    <div className="bg-white border-b h-[49px] flex items-center px-4 overflow-hidden">
+    <div className=" bg-[#0369a1] border-b h-[49px] flex items-center px-4 overflow-hidden rounded-t-2xl text-white  ">
       <ConfirmDialog />
       <Dialog>
         <DialogTrigger asChild>

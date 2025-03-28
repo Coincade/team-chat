@@ -34,7 +34,7 @@ export const Conversation = ({id} : ConversationProps) => {
       }
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-[93%]  rounded-b-3xl mt-[5px] mb-[20px] mr-[20px]">
             <Header 
             memberName={member?.user.name}
             memberImage={member?.user.image}
@@ -49,7 +49,7 @@ export const Conversation = ({id} : ConversationProps) => {
             isLoadingMore={status==="LoadingMore"}
             canLoadMore={status==="CanLoadMore"}
             />
-            <ChatInput 
+               <ChatInput 
             placeholder={`Message ${member?.user.name}`}
             conversationId={id}
             />

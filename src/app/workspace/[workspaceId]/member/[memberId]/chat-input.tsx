@@ -95,7 +95,7 @@ export const ChatInput = ({placeholder, conversationId}: ChatInputProps) =>{
     }
 
     return (
-        <div className="px-5 w-full">
+        <div className="px-5 w-full bg-white rounded-b-3xl">
             <Editor 
             key={editorKey}
             placeholder={placeholder}

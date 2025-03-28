@@ -40,7 +40,7 @@ const ChannelIdPage = () => {
 
   if(channelLoading || status === "LoadingFirstPage") {
     return (
-      <div className='h-full flex-1 flex items-center justify-center'>
+      <div className='h-full flex-1 flex items-center justify-center '>
         <Loader className='animate-spin size-5 text-muted-foreground'/>
       </div>
     )
@@ -48,7 +48,7 @@ const ChannelIdPage = () => {
 
   if(!channel) {
     return (
-      <div className='h-full flex-1 flex flex-col gap-y-2 items-center justify-center'>
+      <div className='h-full flex-1 flex flex-col gap-y-2 items-center justify-center '>
         <TriangleAlert className='size-5 text-muted-foreground'/>
         <span className='text-sm text-muted-foreground'>Channel Not Found</span>
       </div>
@@ -57,11 +57,11 @@ const ChannelIdPage = () => {
 
 
   return (
-    <div className='flex flex-col h-full'>
-      <Header title={channel.name}
-       isCreator={channel.creatorId === currentMember?._id} 
-       type={channel.type}
-       />
+    <div className="flex flex-col h-[93%] rounded-2xl bg-white mt-[5px] mb-[20px] mr-[20px] " >
+        <Header title={channel.name}
+        isCreator={channel.creatorId === currentMember?._id} 
+        type={channel.type}
+        />
       <MessageList
       channelName={channel.name}
       channelCreationTime={channel._creationTime}

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
@@ -11,12 +12,13 @@ import { useGetUnreadCounts } from "@/features/unread/api/use-get-unread-counts"
 import { Id } from "../../../../convex/_generated/dataModel";
 
 const sidebarItemVariants = cva(
-  "flex items-center gap-1.5 justify-start font-normal h-7 px-[18px] text-sm overflow-hidden",
+  "flex items-center gap-1.5 justify-start font-normal h-7 px-[8px] pt-[7px] pb-[7px] text-sm overflow-hidden",
   {
     variants: {
       variant: {
-        default: "text-[#f9edffcc]",
-        active: "text-[#481349] bg-white/90 hover:bg-white/90",
+        default: "text-[#f9edffcc] hover:bg-white/30 ",
+        active: "text-white bg-[#308BBF] hover:bg-[#308BBF]",
+        clicked: "text-white bg-[#66AFCC]",
       },
     },
     defaultVariants: {
@@ -28,7 +30,8 @@ const sidebarItemVariants = cva(
 interface SidebarItemProps {
   label: string;
   id: string;
-  icon: LucideIcon | IconType;
+  // icon: LucideIcon | IconType;
+  image?: string;
   variant?: VariantProps<typeof sidebarItemVariants>["variant"];
   channelId: Id<"channels">;
   onClick: () => void;
@@ -37,12 +40,14 @@ interface SidebarItemProps {
 export const SidebarItem = ({
   label,
   id,
-  icon: Icon,
+  // icon: Icon,
+  image,
   variant,
   channelId,
   onClick,
 }: SidebarItemProps) => {
   const workspaceId = useWorkspaceId();
+  const avatarFallback = label.charAt(0).toUpperCase();
   const { data: unreadCounts, isLoading: unreadCountLoading } =
     useGetUnreadCounts({ workspaceId });
 
@@ -116,15 +121,30 @@ export const SidebarItem = ({
     >
       <Link
         href={`/workspace/${workspaceId}/channel/${id}`}
-        className="flex justify-between"
+        className="flex justify-between "
       >
-        <div className="flex items-center">
-          <Icon className="size-3.5 mr-1 shrink-0" />
+        {/* <div className="flex items-center ">
+          <Icon className="size-3.5 mr-[8px] shrink-0 " />
           <span className="text-sm truncate">{label}</span>
+        </div> */}
+
+        <div className="flex truncate ">
+          <div className="relative  mr-[8px] ">
+            <Avatar className="size-5 rounded-md mr-1  ">
+              <AvatarImage className="rounded-md " src={image} />
+              <AvatarFallback className="rounded-md bg-sky-500 text-white text-xs">
+                {avatarFallback}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+          <span className="text-sm truncate ">{label}</span>
         </div>
+
         {getUnreadCount(channelId, "channel") > 0 && (
-          <span className=" bg-rose-500 text-white rounded-full px-2 text-center">
-            {getUnreadCount(channelId, "channel")}
+          <span className="bg-[#bae6fd] text-[#0c4a6e] font-bold rounded-full px-2 text-center">
+            {getUnreadCount(channelId, "channel") <= 9
+              ? getUnreadCount(channelId, "channel")
+              : "9+"}
           </span>
         )}
       </Link>

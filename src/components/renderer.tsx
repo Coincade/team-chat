@@ -1,51 +1,53 @@
-import Quill from "quill"
-import { useEffect, useRef, useState } from "react"
+import Quill from "quill";
+import { useEffect, useRef, useState } from "react";
 
-interface RendererProps{
-    value: string;
+interface RendererProps {
+  value: string;
 }
 
-const Renderer = ({value}: RendererProps) =>{
-    const [isEmpty, setIsEmpty] = useState(false);
+const Renderer = ({ value }: RendererProps) => {
+  const [isEmpty, setIsEmpty] = useState(false);
 
-    const rendererRef = useRef<HTMLDivElement>(null);
+  const rendererRef = useRef<HTMLDivElement>(null);
 
-    useEffect(()=>{
-        if(!rendererRef.current) return;
+  useEffect(() => {
+    if (!rendererRef.current) return;
 
-        const container = rendererRef.current;
+    const container = rendererRef.current;
 
-        const quill = new Quill(document.createElement("div"), {
-            theme: "snow",
-            modules: {
-                toolbar: false,
-                clipboard: false,
-            },
-            formats: ['bold', 'italic', 'link', 'list', 'image']
-        });
+    const quill = new Quill(document.createElement("div"), {
+      theme: "snow",
+      modules: {
+        toolbar: false,
+        clipboard: false,
+      },
+      formats: ["bold", "italic", "link", "list", "image"],
+    });
 
+    quill.enable(false);
 
+    const contents = JSON.parse(value);
+    quill.setContents(contents);
 
-        quill.enable(false);
+    const isEmpty =
+      quill
+        .getText()
+        .replace(/<(.|\n)*?>/g, "")
+        .trim().length === 0;
+    setIsEmpty(isEmpty);
 
-        const contents = JSON.parse(value);
-        quill.setContents(contents);
+    container.innerHTML = quill.root.innerHTML;
 
-        const isEmpty = quill.getText().replace(/<(.|\n)*?>/g, "").trim().length === 0;
-        setIsEmpty(isEmpty);
+    return () => {
+      if (container) {
+        container.innerHTML = "";
+      }
+    };
+  }, [value]);
 
-        container.innerHTML = quill.root.innerHTML;
+  if (isEmpty) return null;
 
-        return () => {
-            if(container){
-                container.innerHTML = "";
-            }
-        }
-    },[value])
-
-    if(isEmpty) return null;
-
-    return <div ref={rendererRef} className="ql-editor ql-renderer"/>
-}
+  return <div ref={rendererRef} className="ql-editor ql-renderer" />;
+};
 
 export default Renderer;

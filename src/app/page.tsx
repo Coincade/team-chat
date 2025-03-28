@@ -12,17 +12,18 @@ import { toast } from "sonner";
 
 export default function Home() {
   const default_workspace_id = process.env.NEXT_PUBLIC_DEFAULT_WORKSPACE_ID;
-  const default_workspace_joincode = process.env.NEXT_PUBLIC_DEFAULT_WORKSPACE_JOINCODE;
+  const default_workspace_joincode =
+    process.env.NEXT_PUBLIC_DEFAULT_WORKSPACE_JOINCODE;
 
   const router = useRouter();
   const [open, setOpen] = useCreateWorkspaceModal();
 
-  const {data, isLoading} = useGetWorkspaces();
+  const { data, isLoading } = useGetWorkspaces();
   const { mutate, isPending } = useJoin();
 
-  const workspaceId = useMemo(()=>data?.[0]?._id,[data])
+  const workspaceId = useMemo(() => data?.[0]?._id, [data]);
 
-  const handleJoin = (workspaceId:Id<"workspaces">, value: string) => {
+  const handleJoin = (workspaceId: Id<"workspaces">, value: string) => {
     mutate(
       { workspaceId, joinCode: value },
       {
@@ -30,9 +31,9 @@ export default function Home() {
           router.replace(`/workspace/${id}`);
           toast.success("Workspace Joined");
         },
-        onError:() => {
-          toast.error("Failed to join workspace")
-        }
+        onError: () => {
+          toast.error("Failed to join workspace");
+        },
       }
     );
   };
@@ -51,26 +52,35 @@ export default function Home() {
     }
   }, []);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     requestNotificationPermission();
-    if(isLoading || isPending) return;
+    if (isLoading || isPending) return;
 
-    if(workspaceId){
-      router.replace(`/workspace/${workspaceId}`)
+    if (workspaceId) {
+      router.replace(`/workspace/${workspaceId}`);
     }
     // else if(!open){
-    //   setOpen(true);      
+    //   setOpen(true);
     // }
-    else{
-      handleJoin(default_workspace_id as Id<"workspaces">, default_workspace_joincode as string);
+    else {
+      handleJoin(
+        default_workspace_id as Id<"workspaces">,
+        default_workspace_joincode as string
+      );
     }
-  },[requestNotificationPermission,workspaceId, isLoading, isPending, open, setOpen, router]);
-
+  }, [
+    requestNotificationPermission,
+    workspaceId,
+    isLoading,
+    isPending,
+    open,
+    setOpen,
+    router,
+  ]);
 
   return (
-    <div className="h-full flex items-center justify-center">
-        <Loader className="size-10 animate-spin text-muted foreground" />
-      </div>
+    <div className="h-full flex items-center justify-center ">
+      <Loader className="size-10 animate-spin text-muted foreground" />
+    </div>
   );
 }

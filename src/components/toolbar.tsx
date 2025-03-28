@@ -24,7 +24,7 @@ export const Toolbar = ({
 }: ToolbarProps) => {
   return (
     <div className="absolute top-0 right-5">
-      <div className="group-hover:opacity-100 opacity-0 transition-opacity border bg-white rounded-md shadow-sm">
+      <div className="group-hover:opacity-100 opacity-0 transition-opacity border rounded-md shadow-sm">
         <EmojiPopover
           hint="Add reaction"
           onEmojiSelect={(emoji) => handleReaction(emoji.native)}
@@ -36,26 +36,41 @@ export const Toolbar = ({
 
         {!hideThreadButton && (
           <Hint label="Reply To Message">
-            <Button variant="ghost" size="iconSm" disabled={isPending} onClick={handleThread}>
+            <Button
+              variant="ghost"
+              size="iconSm"
+              disabled={isPending}
+              onClick={handleThread}
+            >
               <MessageSquareTextIcon className="size-4" />
             </Button>
           </Hint>
         )}
 
         {isAuthor && (
-        <Hint label="Edit Message">
-          <Button variant="ghost" size="iconSm" disabled={isPending} onClick={handleEdit}>
-            <Pencil className="size-4" />
-          </Button>
-        </Hint>
+          <Hint label="Edit Message">
+            <Button
+              variant="ghost"
+              size="iconSm"
+              disabled={isPending}
+              onClick={handleEdit}
+            >
+              <Pencil className="size-4" />
+            </Button>
+          </Hint>
         )}
 
         {isAuthor && (
-        <Hint label="Delete Message">
-          <Button variant="ghost" size="iconSm" disabled={isPending} onClick={handleDelete}>
-            <Trash className="size-4" />
-          </Button>
-        </Hint>
+          <Hint label="Delete Message">
+            <Button
+              variant="ghost"
+              size="iconSm"
+              disabled={isPending}
+              onClick={handleDelete}
+            >
+              <Trash className="size-4" />
+            </Button>
+          </Hint>
         )}
       </div>
     </div>
