@@ -136,7 +136,11 @@ export const UserItem = ({
         </div>
         {conversationId && unreadCount && (
           <span className="bg-[#bae6fd] text-[#0c4a6e] font-black rounded-full px-2 text-center">
-            {unreadCount.unreadCount <= 9 ? unreadCount.unreadCount : "9+"}
+            {unreadCount.unreadCount > 0
+              ? unreadCount.unreadCount <= 9
+                ? unreadCount.unreadCount
+                : "9+"
+              : ""}
           </span>
         )}
       </Link>
