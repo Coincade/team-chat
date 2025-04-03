@@ -21,7 +21,13 @@ import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { toast } from "sonner";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useRouter } from "next/navigation";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ProfileProps {
   memberId: Id<"members">;
@@ -58,9 +64,9 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
   const { mutate: removeMember, isPending: isRemovingMember } =
     useRemoveMember();
 
-  const onRemove = async() => {
-    const ok = await confirmRemove()
-    if(!ok) return;
+  const onRemove = async () => {
+    const ok = await confirmRemove();
+    if (!ok) return;
 
     removeMember(
       { id: memberId },
@@ -76,9 +82,9 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
     );
   };
 
-  const onLeave = async() => {
-    const ok = await confirmLeave()
-    if(!ok) return;
+  const onLeave = async () => {
+    const ok = await confirmLeave();
+    if (!ok) return;
 
     removeMember(
       { id: memberId },
@@ -95,9 +101,9 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
     );
   };
 
-  const onUpdate = async(role: "admin" | "member") => {
+  const onUpdate = async (role: "admin" | "member") => {
     const ok = await confirmUpdate();
-    if(!ok) return;
+    if (!ok) return;
 
     updateMember(
       { id: memberId, role },
@@ -152,14 +158,14 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
 
   return (
     <>
-    <RemoveDialog />
-    <LeaveDialog />
-    <UpdateDialog />
-      <div className="h-full flex flex-col">
+      <RemoveDialog />
+      <LeaveDialog />
+      <UpdateDialog />
+      <div className="h-[93.5%] flex flex-col bg-white rounded-2xl mr-4">
         <div className="h-[49px] flex justify-between items-center px-4 border-b">
           <p className="text-lg font-bold">Profile</p>
           <Button onClick={onClose} size="iconSm" variant="ghost">
-            <XIcon className="size-5 stroke-[1.5]" />
+            <XIcon className="size-5 stroke-[1.5]"/>
           </Button>
         </div>
         <div className="flex flex-col items-center justify-center p-4">
@@ -175,32 +181,30 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
           {currentMember?.role === "admin" &&
           currentMember?._id !== memberId ? (
             <div className="flex items-center gap-2 mt-4">
-
               <DropdownMenu>
-                <DropdownMenuTrigger asChild
-                >
-              <Button variant="outline" className="w-full capitalize">
-                {member.role} <ChevronDown className="size-4 ml-2" />
-              </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-full">
-                <DropdownMenuRadioGroup
-                value={member.role}
-                onValueChange={(role) => onUpdate(role as "admin" | "member")}
-                >
-                  <DropdownMenuRadioItem value="admin">
-                    Admin
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="member">
-                    Member
-                  </DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full capitalize">
+                    {member.role} <ChevronDown className="size-4 ml-2"/>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full">
+                  <DropdownMenuRadioGroup
+                    value={member.role}
+                    onValueChange={(role) =>
+                      onUpdate(role as "admin" | "member")
+                    }
+                  >
+                    <DropdownMenuRadioItem value="admin">
+                      Admin
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="member">
+                      Member
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button 
-              onClick={onRemove}
-              variant="outline" className="w-full">
+              <Button onClick={onRemove} variant="outline" className="w-full">
                 Remove
               </Button>
             </div>

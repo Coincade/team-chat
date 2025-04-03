@@ -41,16 +41,16 @@ export const WorkspaceHeader = ({
 
       <div className="flex items-center justify-between px-4 h-[49px] gap-0.5">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          {/* <DropdownMenuTrigger asChild> */}
             <Button
               variant="transparent"
               className="font-semibold text-lg w-auto p-1.5 overflow-hidden"
               size="sm"
             >
               <span className="truncate">{workspace.name}</span>
-              <ChevronDown className="size-4 ml-1 shrink-0" />
+              {/* <ChevronDown className="size-4 ml-1 shrink-0" /> */}
             </Button>
-          </DropdownMenuTrigger>
+          {/* </DropdownMenuTrigger> */}
           <DropdownMenuContent side="bottom" align="start" w-64>
             <DropdownMenuItem className="cursor-pointer capitalize">
               <div className="size-9 relative overflow-hidden bg-[#616061] text-white font-semibold text-xl rounded-md flex items-center justify-center mr-2">

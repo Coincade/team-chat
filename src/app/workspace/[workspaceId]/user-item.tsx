@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import { UseGetPresence } from "@/features/presence/api/use-get-presence";
 
 const userItemVariants = cva(
-  "flex items-center gap-1.5 justify-start font-normal h-7 px-[8px] pt-[7px] pb-[7px] text-sm overflow-hidden ",
+  "flex items-center gap-1.5 justify-start font-normal h-9 px-[8px] pt-[7px] pb-[7px] text-sm overflow-hidden ",
   {
     variants: {
       variant: {
